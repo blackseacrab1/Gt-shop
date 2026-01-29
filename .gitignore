@@ -1,0 +1,8 @@
+# Артефакты тестов (генерируются при запуске)
+sitemap_check_report.txt
+
+# Кэш Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd

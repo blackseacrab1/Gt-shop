@@ -1,0 +1,8 @@
+stages:
+  - test
+
+sitemap_check:
+  stage: test
+  image: python:3.11
+  script:
+    - python tests/sitemap/check_sitemaps.py
