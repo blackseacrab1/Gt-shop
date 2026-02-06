@@ -2,6 +2,7 @@
 sitemap_check_report.txt
 reports/
 *.txt
+!requirements.txt
 
 # Кэш Python
 __pycache__/
