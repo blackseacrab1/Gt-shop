@@ -1,8 +1,70 @@
 stages:
   - test
 
+variables:
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+
+cache:
+  paths:
+    - .cache/pip/
+
+# Тесты для main.py
+test_main:
+  stage: test
+  image: python:3.11
+  before_script:
+    - pip install --upgrade pip
+    - pip install -r requirements.txt
+  script:
+    - pytest tests/test_main.py -v --tb=short
+  artifacts:
+    when: always
+    paths:
+      - reports/
+    expire_in: 1 week
+
+# Тесты для sitemaps
+test_sitemaps:
+  stage: test
+  image: python:3.11
+  before_script:
+    - pip install --upgrade pip
+    - pip install -r requirements.txt
+  script:
+    - pytest tests/test_sitemaps.py -v --tb=short -m integration
+  artifacts:
+    when: always
+    paths:
+      - sitemap_check_report.txt
+    expire_in: 1 week
+
+# Запуск оригинального скрипта проверки sitemaps
 sitemap_check:
   stage: test
   image: python:3.11
+  before_script:
+    - pip install --upgrade pip
+    - pip install -r requirements.txt
   script:
     - python tests/sitemap/check_sitemaps.py
+  artifacts:
+    when: always
+    paths:
+      - sitemap_check_report.txt
+    expire_in: 1 week
+
+# Запуск всех тестов вместе
+test_all:
+  stage: test
+  image: python:3.11
+  before_script:
+    - pip install --upgrade pip
+    - pip install -r requirements.txt
+  script:
+    - pytest tests/ -v --tb=short -m integration
+  artifacts:
+    when: always
+    paths:
+      - reports/
+      - sitemap_check_report.txt
+    expire_in: 1 week
